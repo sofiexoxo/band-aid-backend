@@ -107,7 +107,6 @@ async def book(booking: Booking):
 # Endpoint voor ophalen van bands
 @app.get("/bands")
 async def get_bands():
-    # Hier kan je bands uit je database of een andere gegevensbron halen
     bands = [
         {"name": "BandRockers", "genre": "Rock"},
         {"name": "GhostRockers", "genre": "Rock"},
