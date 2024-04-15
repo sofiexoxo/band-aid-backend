@@ -11,6 +11,10 @@ app = FastAPI()
 
 DATABASE_URL = "postgresql://postgres:Schatje123@localhost:5432/band_aid"
 
+@app.get("/")
+async def start():
+    return {"message": " successful"}
+
 
 async def get_database_connection():
     connection = await asyncpg.connect(DATABASE_URL)
