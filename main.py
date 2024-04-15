@@ -9,7 +9,8 @@ import asyncpg
 
 app = FastAPI()
 
-DATABASE_URL = "postgresql://user:password@localhost:5432/database_name"
+DATABASE_URL = "postgresql://postgres:Schatje123@localhost:5432/band_aid"
+
 
 async def get_database_connection():
     connection = await asyncpg.connect(DATABASE_URL)
