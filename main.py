@@ -116,5 +116,11 @@ async def get_bands():
         {"name": "BandRockers", "genre": "Rock"},
         {"name": "GhostRockers", "genre": "Rock"},
         {"name": "Karikatura Reggae Fusion Band", "genre": "Reggae"},
+        {"name": "Festi", "genre": "Blues"},
+        {"name": "Fusion Band", "genre": "Fusion music"},
+        {"name": "Catastrophe", "genre": "Reggae"},
+        {"name": "Outlanders", "genre": "POP"},
+        {"name": "ReACT", "genre": "jazz"},
+        {"name": "LAUnch", "genre": "Reggae"},
     ]
     return bands
