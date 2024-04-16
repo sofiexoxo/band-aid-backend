@@ -9,7 +9,7 @@ import asyncpg
 
 app = FastAPI()
 
-DATABASE_URL = "postgresql://postgres:Schatje123@localhost:5432/band_aid"
+DATABASE_URL = "postgresql://sofie:Schatje123@localhost:5432/my_database"
 
 @app.get("/")
 async def start():
