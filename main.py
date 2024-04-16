@@ -8,73 +8,12 @@ import jwt
 import asyncpg
 
 app = FastAPI()
-
-DATABASE_URL = "postgresql://sofie:Schatje123@localhost:5432/my_database"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 @app.get("/")
 async def start():
     return {"message": " successful"}
-
-
-async def get_database_connection():
-    connection = await asyncpg.connect(DATABASE_URL)
-    try:
-        yield connection
-    finally:
-        await connection.close()
-
-# Definieer de User-klasse
-class User(BaseModel):
-    email: str
-    password: str
-
-# Definieer de Booking-klasse
-class Booking(BaseModel):
-    name: str
-    email: str
-    date: str
-    band: str
-
-# CryptContext voor wachtwoord hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-# Geheime sleutel voor JWT-signering (moet veilig worden opgeslagen)
-SECRET_KEY = "secretkey"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-# Functie om wachtwoord te hashen
-def hash_password(password: str):
-    return pwd_context.hash(password)
-
-# Functie om wachtwoord te verifieren
-def verify_password(plain_password: str, hashed_password: str):
-    return pwd_context.verify(plain_password, hashed_password)
-
-# Functie om gebruiker op te halen op basis van email
-async def get_user(connection, email: str):
-    query = "SELECT * FROM users WHERE email = $1"
-    record = await connection.fetchrow(query, email)
-    if record:
-        return User(email=record['email'], password=record['password'])
-    return None
-
-# Functie om gebruiker op te slaan in de database
-async def create_user(connection, user: User):
-    query = "INSERT INTO users (email, password) VALUES ($1, $2)"
-    await connection.execute(query, user.email, hash_password(user.password))
-
-# Functie om JWT-token te maken
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
-
 # OAuth2 Password Flow voor gebruikersauthenticatie
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 

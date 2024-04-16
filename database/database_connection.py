@@ -1,6 +1,14 @@
-import asyncpg
-from asyncpg import Connection
 
+import asyncpg
+
+from database.database_config import DATABASE_URL
+
+async def get_database_connection():
+    connection = await asyncpg.connect(DATABASE_URL)
+    try:
+        yield connection
+    finally:
+        await connection.close()
 class Database:
     def __init__(self, dsn: str):
         self.dsn = dsn
