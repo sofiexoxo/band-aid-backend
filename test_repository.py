@@ -42,5 +42,8 @@ async def test_create_user(connection_mock):
     # Check if the correct query was executed
     connection_mock.execute.assert_called_once_with("INSERT INTO users (email, password) VALUES ($1, $2)", "test@example.com", "hashed_password")
 
-
-
+@pytest.fixture(autouse=True)
+async def close_connection(connection_mock):
+    yield
+    if not connection_mock.closed:
+        await connection_mock.close()

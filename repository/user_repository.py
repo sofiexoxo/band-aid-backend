@@ -1,5 +1,7 @@
 
 import asyncpg
+import pytest
+from unittest.mock import MagicMock
 
 async def get_user(connection, email: str):
     query = "SELECT * FROM users WHERE email = $1"
