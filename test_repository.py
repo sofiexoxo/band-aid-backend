@@ -5,6 +5,7 @@ from repository.user_repository import get_user, create_user
 from unittest.mock import AsyncMock
 
 from types import SimpleNamespace
+from models import User
 
 @pytest.fixture
 def connection_mock():
@@ -32,7 +33,7 @@ async def test_get_user(connection_mock):
 async def test_create_user(connection_mock):
     # Prepare test data
     test_user = SimpleNamespace(email="test@example.com", password="hashed_password")
-    
+
     # Configure connection_mock to have an asynchronous execute method
     connection_mock.execute = AsyncMock()
 
@@ -40,8 +41,11 @@ async def test_create_user(connection_mock):
     await create_user(connection_mock, test_user)
 
     # Check if the correct query was executed
-    connection_mock.execute.assert_called_once_with("INSERT INTO users (email, password) VALUES ($1, $2)", "test@example.com", "hashed_password")
-
+    connection_mock.execute.assert_called_once_with(
+        "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email",
+        "test@example.com",
+        "hashed_password"
+    )
 @pytest.fixture(autouse=True)
 async def close_connection(connection_mock):
     yield
