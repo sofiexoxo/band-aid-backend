@@ -1,20 +1,17 @@
-
 import asyncpg
-
+from asyncpg import Connection  # Add this import statement
 from database.database_config import DATABASE_URL
 
-async def get_database_connection():
-    connection = await asyncpg.connect(DATABASE_URL)
-    try:
-        yield connection
-    finally:
-        await connection.close()
 class Database:
     def __init__(self, dsn: str):
         self.dsn = dsn
 
     async def connect(self) -> Connection:
-        return await asyncpg.connect(self.dsn)
+        connection = await asyncpg.connect(self.dsn)  # Use self.dsn instead of DATABASE_URL
+        try:
+            return connection
+        finally:
+            await connection.close()
 
     async def close(self, connection: Connection):
         await connection.close()

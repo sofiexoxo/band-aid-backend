@@ -1,11 +1,14 @@
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from passlib.context import CryptContext
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional
-from pydantic import BaseModel
 import jwt
-import asyncpg
+
+from database.database_config import DATABASE_URL
+from database.database_connection import Database 
+from service.security_service import hash_password, verify_password, create_access_token
+from repository.user_repository import get_user, create_user
+from models import User, Booking
 
 app = FastAPI()
 ALGORITHM = "HS256"
@@ -19,8 +22,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # Endpoint voor inloggen en genereren van JWT-token
 @app.post("/token")
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), connection = Depends(get_database_connection)):
-    user = await get_user(connection, form_data.username)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:Database = Depends(Database)):
+    user = await get_user(db, form_data.username)
     if not user or not verify_password(form_data.password, user.password):
         raise HTTPException(status_code=401, detail="Incorrect email or password")
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -29,11 +32,11 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
 # Endpoint voor registreren
 @app.post("/register")
-async def register(user: User, connection = Depends(get_database_connection)):
+async def register(user: User, db:Database = Depends(Database)):
     existing_user = await get_user(connection, user.email)
     if existing_user:
         raise HTTPException(status_code=400, detail="Email is already registered")
-    await create_user(connection, User(email=user.email, password=user.password))
+    await create_user(db, User(email=user.email, password=user.password))
     return {"message": "Registration successful"}
 
 # Endpoint voor uitloggen
