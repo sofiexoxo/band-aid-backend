@@ -1,9 +1,6 @@
 from models import Booking
 from database.database_connection import Database
 
-def __init__(self, pool: asyncpg.Pool):
-        self.pool = pool
-        
 async def create_booking(db: Database, booking: Booking):
     query = "INSERT INTO bookings (name, email, date, band) VALUES ($1, $2, $3, $4) RETURNING id, date, band"
     return await db.execute(query, booking.name, booking.email, booking.date, booking.band)
