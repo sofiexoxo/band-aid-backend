@@ -21,7 +21,7 @@ async def start():
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # Endpoint voor inloggen en genereren van JWT-token
-@app.post("/token")
+@app.post("/api/token")
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:Database = Depends(Database)):
     user = await get_user(db, form_data.username)
     if not user or not verify_password(form_data.password, user.password):
@@ -31,7 +31,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 # Endpoint voor registreren
-@app.post("/register")
+@app.post("/api/register")
 async def register(user: User, db:Database = Depends(Database)):
     existing_user = await get_user(connection, user.email)
     if existing_user:
@@ -40,19 +40,19 @@ async def register(user: User, db:Database = Depends(Database)):
     return {"message": "Registration successful"}
 
 # Endpoint voor uitloggen
-@app.post("/logout")
+@app.post("/api/logout")
 async def logout():
     return {"message": "Logout successful"}
 
 # Endpoint voor boeken
-@app.post("/book")
+@app.post("/api/book")
 async def book(booking: Booking):
     # Hier zou je typisch de boekingsgegevens naar je database opslaan
     # Voor demonstratiedoeleinden geven we hier gewoon de boekingsgegevens terug
     return {"message": "Booking successful", "booking": booking.dict()}
 
 # Endpoint voor ophalen van bands
-@app.get("/bands")
+@app.get("/api/bands")
 async def get_bands():
     bands = [
         {"name": "BandRockers", "genre": "Rock"},
