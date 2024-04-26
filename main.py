@@ -51,18 +51,3 @@ async def book(booking: Booking):
     # Voor demonstratiedoeleinden geven we hier gewoon de boekingsgegevens terug
     return {"message": "Booking successful", "booking": booking.dict()}
 
-# Endpoint voor ophalen van bands
-@app.get("/api/bands")
-async def get_bands():
-    bands = [
-        {"name": "BandRockers", "genre": "Rock"},
-        {"name": "GhostRockers", "genre": "Rock"},
-        {"name": "Karikatura Reggae Fusion Band", "genre": "Reggae"},
-        {"name": "Festi", "genre": "Blues"},
-        {"name": "Fusion Band", "genre": "Fusion music"},
-        {"name": "Catastrophe", "genre": "Reggae"},
-        {"name": "Outlanders", "genre": "POP"},
-        {"name": "ReACT", "genre": "jazz"},
-        {"name": "LAUnch", "genre": "Reggae"},
-    ]
-    return bands
