@@ -41,8 +41,9 @@ async def register(user: User, db:Database = Depends(Database)):
 
 # Endpoint voor uitloggen
 @app.post("/api/logout")
-async def logout():
+async def logout(token: str = Depends(oauth2_scheme)):
     return {"message": "Logout successful"}
+
 
 # Endpoint voor boeken
 @app.post("/api/bookingpage")
