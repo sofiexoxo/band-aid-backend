@@ -7,7 +7,7 @@ class Database:
     def __init__(self, dsn: str = DATABASE_URL): 
         self.dsn = dsn
 
-    async def connect(self) -> Connection:
+    async def connect(self):
         return await asyncpg.connect(self.dsn)  
 
     async def close(self, connection: Connection):
@@ -23,15 +23,13 @@ class Database:
 
     async def get_user(self, email): 
         query = "SELECT * FROM users WHERE email = $1"
-        async with self.connect() as connection:
-            record = await connection.fetchrow(query, email)
-            return record
+        async with self.connect() as connection:    
+            return await connection.fetch(query, email)
 
     async def register_user(self, email, password):
         query = "INSERT INTO users (email, password) VALUES ($1, $2)"
         await self.execute(query, email, password)
 
-# Example usage
 async def main():
     # Initialize the Database object with the DATABASE_URL
     db = Database()
