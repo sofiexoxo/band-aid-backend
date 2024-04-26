@@ -21,7 +21,7 @@ async def start():
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # Endpoint voor inloggen en genereren van JWT-token
-@app.post("/api/token")
+@app.post("/api/login")
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:Database = Depends(Database)):
     user = await get_user(db, form_data.username)
     if not user or not verify_password(form_data.password, user.password):
