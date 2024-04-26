@@ -45,7 +45,7 @@ async def logout():
     return {"message": "Logout successful"}
 
 # Endpoint voor boeken
-@app.post("/api/book")
+@app.post("/api/bookingpage")
 async def book(booking: Booking):
     # Hier zou je typisch de boekingsgegevens naar je database opslaan
     # Voor demonstratiedoeleinden geven we hier gewoon de boekingsgegevens terug
