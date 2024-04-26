@@ -33,7 +33,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 # Endpoint voor registreren
 @app.post("/api/register")
 async def register(user: User, db:Database = Depends(Database)):
-    existing_user = await get_user(connection, user.email)
+    existing_user = await get_user(db, user.email)
     if existing_user:
         raise HTTPException(status_code=400, detail="Email is already registered")
     await create_user(db, User(email=user.email, password=user.password))
