@@ -3,10 +3,6 @@ import asyncpg
 from asyncpg import Connection
 from database.database_config import DATABASE_URL  
 
-import asyncpg
-from asyncpg import Connection
-from database.database_config import DATABASE_URL  
-
 class Database:
     def __init__(self, dsn: str = DATABASE_URL): 
         self.dsn = dsn
