@@ -4,8 +4,6 @@ from unittest.mock import MagicMock
 from database.database_connection import Database
 from models import User
 
-async def fetchrow(query, email):
-    return test_record
 
 async def get_user(connection, email: str):
     query = "SELECT * FROM users WHERE email = $1"
