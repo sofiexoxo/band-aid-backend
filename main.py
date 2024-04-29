@@ -36,7 +36,7 @@ async def register(user: User, db:Database = Depends(Database)):
     existing_user = await get_user(db, user.email)
     if existing_user:
         raise HTTPException(status_code=400, detail="Email is already registered")
-    await create_user(db, User(email=user.email, password=user.password))
+    await create_user(db, User(email=user.email, password=hash_password(user.password)))
     return {"message": "Registration successful"}
 
 # Endpoint voor uitloggen
