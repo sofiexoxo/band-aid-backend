@@ -1,11 +1,10 @@
 import asyncpg
 import pytest
-from unittest.mock import MagicMock
 from database.database_connection import Database
 from models import User
 
 
-async def get_user(connection, email: str):
+async def get_user(connection: Database, email: str):
     query = "SELECT * FROM users WHERE email = $1"
     record = await connection.fetch(query, email)
     if record:
@@ -18,7 +17,7 @@ async def create_user(db: Database, user: User):
 
 async def get_user_by_email(db: Database, email: str):
     query = "SELECT * FROM users WHERE email = $1"
-    return await db.fetch_one(query, email)
+    return await db.fetch(query, email)
 
 async def update_user_password(db: Database, email: str, new_password: str):
     query = "UPDATE users SET password = $1 WHERE email = $2"

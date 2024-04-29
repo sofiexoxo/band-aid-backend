@@ -1,33 +1,34 @@
 import asyncio
-import asyncpg
 from asyncpg import Connection
 from database.database_config import DATABASE_URL  
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, AsyncEngine 
+from sqlalchemy import text
 
 
 class Database:
     def __init__(self, dsn: str = DATABASE_URL):    
         self.dsn = dsn
 
-    async def connect(self) -> Connection:
-        return await asyncpg.connect(self.dsn)
+    def connect(self) -> AsyncEngine:
+        return create_async_engine(DATABASE_URL, echo=False, future=True)
 
     async def close(self, connection: Connection):
         await connection.close()
 
     async def execute(self, query: str, *args):
-        async with self.connect() as connection:
-            return await connection.execute(query, *args)
+        async with self.connect().begin() as connection:
+            return await connection.execute(text(query), *args)
 
     async def fetch(self, query: str, *args):
-        connection = await self.connect()
-        try:
-            return await connection.fetch(query, *args)
-        finally:
-            await self.close(connection)
+        async with self.connect().begin() as connection:
+               print(*args)
+               return await connection.execute(text(query), (args))
+
 
     async def fetchrow(self, query: str, *args):
         async with self.connect() as connection:
             return await connection.fetchrow(query, *args)
+        
     async def register_user(self, email: str, password: str):
         query = "INSERT INTO users (email, password) VALUES ($1, $2)"
         await self.execute(query, email, password)
