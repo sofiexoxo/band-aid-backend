@@ -5,7 +5,7 @@ from database.database_config import DATABASE_URL
 
 
 class Database:
-    def __init__(self, dsn: str = DATABASE_URL): 
+    def __init__(self, dsn: str = DATABASE_URL):    
         self.dsn = dsn
 
     async def connect(self) -> Connection:

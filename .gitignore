@@ -1,3 +1,39 @@
-*.pyc
+# Byte-compiled / optimized files
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Python environment
 venv/
+.env
+env/
+
+# IDE files
+.idea/
+.vscode/
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# Compiled Python files
+*.pyc
+
+# Log files
+*.log
+
+# Editor-specific files
+*~
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore generated files
+*.xlsx
+*.pdf
+
+# Ignore sensitive or configuration files
+config.ini
+secrets.json
