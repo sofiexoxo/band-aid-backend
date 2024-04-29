@@ -19,12 +19,22 @@ class Database:
             return await connection.execute(query, *args)
 
     async def fetch(self, query: str, *args):
-        async with self.connect() as connection:
+        connection = await self.connect()
+        try:
             return await connection.fetch(query, *args)
+        finally:
+            await self.close(connection)
 
     async def fetchrow(self, query: str, *args):
         async with self.connect() as connection:
             return await connection.fetchrow(query, *args)
+    async def register_user(self, email: str, password: str):
+        query = "INSERT INTO users (email, password) VALUES ($1, $2)"
+        await self.execute(query, email, password)
+
+    async def get_user(self, email: str):
+        query = "SELECT * FROM users WHERE email = $1"
+        return await self.fetchrow(query, email)
 
 
 async def main():
